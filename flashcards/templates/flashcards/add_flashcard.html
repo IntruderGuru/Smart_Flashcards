@@ -1,0 +1,109 @@
+{% extends "flashcards/base.html" %}
+
+{% block title %}Add Flashcard{% endblock %}
+
+{% block content %}
+<div class="container mt-4">
+    <h1 class="mb-4">Add Flashcard</h1>
+
+    <!-- Flashcard Submission Form -->
+    <form method="post" action="{% url 'flashcards:add_flashcard' %}" class="p-4 border rounded bg-light">
+        <!-- CSRF Token for Security -->
+        {% csrf_token %}
+
+        <!-- Question Field -->
+        <div class="mb-3">
+            <label for="question" class="form-label">Question</label>
+            <textarea 
+                class="form-control" 
+                id="question" 
+                name="question" 
+                rows="3" 
+                required
+                placeholder="Enter the question here"
+            ></textarea>
+        </div>
+
+        {% if form.question.errors %}
+            <div class="alert alert-danger mt-2">
+            {{ form.question.errors }}
+            </div>
+        {% endif %}
+
+        <!-- Answer Field -->
+        <div class="mb-3">
+            <label for="answer" class="form-label">Answer</label>
+            <textarea 
+                class="form-control" 
+                id="answer" 
+                name="answer" 
+                rows="3" 
+                required
+                placeholder="Enter the answer here"
+            ></textarea>
+        </div>
+
+        <!-- Category Selection Dropdown -->
+        <div class="mb-3">
+            <label for="category_select" class="form-label">Select Category</label>
+            <select 
+                class="form-select" 
+                id="category_select" 
+                name="category_select"
+                aria-label="Select existing category"
+            >
+                <option value="">Choose an existing category...</option>
+                <!-- Dynamically Populate Categories -->
+                {% for category in categories %}
+                    <option value="{{ category }}">{{ category }}</option>
+                {% endfor %}
+            </select>
+        </div>
+
+        <!-- New Category Input Field -->
+        <div class="mb-3">
+            <label for="category_new" class="form-label">Or Add New Category</label>
+            <input 
+                type="text" 
+                class="form-control" 
+                id="category_new" 
+                name="category_new" 
+                placeholder="Enter a new category name"
+                aria-label="Add new category"
+            >
+            <div class="form-text">If the category doesn't exist, you can add a new one here.</div>
+        </div>
+
+        <!-- Source Field -->
+        <div class="mb-3">
+            <label for="source" class="form-label">Source</label>
+            <input 
+                type="text" 
+                class="form-control" 
+                id="source" 
+                name="source" 
+                placeholder="Source of the flashcard (e.g., textbook, lecture)"
+                aria-label="Enter source of the flashcard"
+            >
+            <div class="form-text">Provide the source from where the flashcard information is derived.</div>
+        </div>
+
+        <!-- Submit Button -->
+        <button type="submit" class="btn btn-primary">Add Flashcard</button>
+    </form>
+</div>
+
+<style>
+    /* Styles the preformatted text block for better readability */
+    pre.flashcard-content {
+        font-family: Consolas, "Courier New", monospace; /* Fixed-width font for alignment */
+        background-color: #f9f9f9; /* Light gray background */
+        padding: 10px; /* Padding around the text */
+        border-radius: 5px; /* Rounded corners */
+        white-space: pre-wrap; /* Wrap long lines */
+        margin: 0; /* Remove default margins */
+        text-align: left; /* Left-align text */
+    }
+</style>
+
+{% endblock %}

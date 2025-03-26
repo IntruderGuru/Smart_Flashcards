@@ -1,0 +1,142 @@
+{% extends "flashcards/base.html" %}
+{% load dict_filters %}  
+
+{% block title %}Flashcards List{% endblock %}
+
+{% block content %}
+<div class="container mt-4">
+    <h1 class="mb-4">Flashcards by Category</h1>
+    
+    {% for category in page_obj_categories.object_list %}
+    <div class="mb-4">
+        <h2>{{ category }}</h2>
+        <a href="{% url 'flashcards:learn_flashcards' category %}" class="btn btn-success mb-2">
+            Start Learning
+        </a>
+        {% with flashcards=flashcards_by_category|get_item:category %}
+            {% if flashcards %}
+            <table class="table table-striped">
+                <thead>
+                    <tr>
+                        <th>Question</th>
+                        <th>Answer</th>
+                        <th>Source</th>
+                        <th>Actions</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    {% for flashcard in flashcards %}
+                    <tr>
+                        <td>{{ flashcard.question }}</td>
+                        <td>{{ flashcard.answer }}</td>
+                        <td>{{ flashcard.source }}</td>
+                        <td>
+                            <a href="{% url 'flashcards:edit_flashcard' flashcard.id %}" class="btn btn-sm btn-warning">
+                                Edit
+                            </a>
+                            <a href="{% url 'flashcards:delete_flashcard' flashcard.id %}" class="btn btn-sm btn-danger">
+                                Delete
+                            </a>
+                            <a href="{% url 'flashcards:display_flashcard' flashcard.id %}?format=text" class="btn btn-sm btn-secondary">
+                                View (Text)
+                            </a>
+                            <a href="{% url 'flashcards:display_flashcard' flashcard.id %}?format=audio" class="btn btn-sm btn-primary">
+                                View (Audio)
+                            </a>
+                        </td>
+                    </tr>
+                    {% endfor %}
+                </tbody>
+            </table>
+
+            <!-- Pagination Controls for this Category -->
+            <nav aria-label="Page navigation for {{ category }}">
+                <ul class="pagination justify-content-center">
+                    {% with paginator=paginator_by_category|get_item:category %}
+                        {% if paginator.has_previous %}
+                        <li class="page-item">
+                            <a class="page-link" href="?page_flashcards_{{ category }}={{ paginator.previous_page_number }}" aria-label="Previous">
+                                <span aria-hidden="true">&laquo;</span>
+                            </a>
+                        </li>
+                        {% else %}
+                        <li class="page-item disabled">
+                            <span class="page-link" aria-label="Previous">
+                                <span aria-hidden="true">&laquo;</span>
+                            </span>
+                        </li>
+                        {% endif %}
+
+                        {% for num in paginator.paginator.page_range %}
+                            {% if paginator.number == num %}
+                                <li class="page-item active"><span class="page-link">{{ num }}</span></li>
+                            {% elif num > paginator.number|add:'-3' and num < paginator.number|add:'3' %}
+                                <li class="page-item"><a class="page-link" href="?page_flashcards_{{ category }}={{ num }}">{{ num }}</a></li>
+                            {% endif %}
+                        {% endfor %}
+
+                        {% if paginator.has_next %}
+                        <li class="page-item">
+                            <a class="page-link" href="?page_flashcards_{{ category }}={{ paginator.next_page_number }}" aria-label="Next Categories">
+                                <span aria-hidden="true">&raquo;</span>
+                            </a>
+                        </li>
+                        {% else %}
+                        <li class="page-item disabled">
+                            <span class="page-link" aria-label="Next Categories">
+                                <span aria-hidden="true">&raquo;</span>
+                            </span>
+                        </li>
+                        {% endif %}
+                    {% endwith %}
+                </ul>
+            </nav>
+            {% else %}
+            <p class="text-muted">No flashcards available in this category.</p>
+            {% endif %}
+        {% endwith %}
+    </div>
+    {% endfor %}
+
+    <!-- Pagination Controls for Categories -->
+    <nav aria-label="Page navigation for categories">
+        <ul class="pagination justify-content-center">
+            {% if page_obj_categories.has_previous %}
+            <li class="page-item">
+                <a class="page-link" href="?page_categories={{ page_obj_categories.previous_page_number }}" aria-label="Previous Categories">
+                    <span aria-hidden="true">&laquo;</span>
+                </a>
+            </li>
+            {% else %}
+            <li class="page-item disabled">
+                <span class="page-link" aria-label="Previous Categories">
+                    <span aria-hidden="true">&laquo;</span>
+                </span>
+            </li>
+            {% endif %}
+
+            {% for num in page_obj_categories.paginator.page_range %}
+                {% if page_obj_categories.number == num %}
+                    <li class="page-item active"><span class="page-link">{{ num }}</span></li>
+                {% elif num > page_obj_categories.number|add:'-3' and num < page_obj_categories.number|add:'3' %}
+                    <li class="page-item"><a class="page-link" href="?page_categories={{ num }}">{{ num }}</a></li>
+                {% endif %}
+            {% endfor %}
+
+            {% if page_obj_categories.has_next %}
+            <li class="page-item">
+                <a class="page-link" href="?page_categories={{ page_obj_categories.next_page_number }}" aria-label="Next Categories">
+                    <span aria-hidden="true">&raquo;</span>
+                </a>
+            </li>
+            {% else %}
+            <li class="page-item disabled">
+                <span class="page-link" aria-label="Next Categories">
+                    <span aria-hidden="true">&raquo;</span>
+                </span>
+            </li>
+            {% endif %}
+        </ul>
+    </nav>
+</div>
+{% endblock %}

@@ -1,0 +1,56 @@
+{% extends "flashcards/base.html" %}
+
+{% block content %}
+<div class="container mt-5">
+    <div class="row justify-content-center">
+        <div class="col-md-6">
+            <div class="card shadow-sm">
+                <div class="card-header bg-danger text-white">
+                    <h3 class="mb-0">Confirm Deletion</h3>
+                </div>
+                <div class="card-body">
+                    <!-- 
+                        Deletion Prompt
+                        -------------------
+                    -->
+                    <p class="lead">Are you sure you want to delete the following flashcard?</p>
+                    
+                    <!-- 
+                        Flashcard Details
+                        -------------------
+                    -->
+                    <div class="alert alert-warning">
+                        <strong>Question:</strong> "{{ object.question }}"
+                    </div>
+                    
+                    <!-- 
+                        Deletion Form
+                        -------------------
+                    -->
+                    <form method="post">
+                        {% csrf_token %}
+                        
+                        <!-- 
+                            Form Buttons
+                            -------------------
+                        -->
+                        <div class="d-flex justify-content-end">
+                            <!-- 
+                                Delete Button
+                                -------------------
+                            -->
+                            <button type="submit" class="btn btn-danger me-2">Yes, Delete</button>
+                            
+                            <!-- 
+                                Cancel Button
+                                -------------------
+                            -->
+                            <a href="{% url 'flashcards:flashcard_list' %}" class="btn btn-secondary">Cancel</a>
+                        </div>
+                    </form>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+{% endblock %}

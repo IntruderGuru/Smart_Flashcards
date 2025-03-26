@@ -1,0 +1,103 @@
+{% extends "flashcards/base.html" %}
+{% block title %}Generate Flashcards from Text{% endblock %}
+
+{% block content %}
+<div class="container mt-4">
+    <h1 class="mb-4">Generate Flashcards from Text</h1>
+
+    <form method="post">
+        {% csrf_token %}
+        <div class="mb-3">
+            <label for="text" class="form-label">Enter Text:</label>
+            <textarea 
+                id="text" 
+                name="text" 
+                rows="5" 
+                class="form-control" 
+                placeholder="Enter text for analysis..." 
+                required
+            ></textarea>
+        </div>
+        <button type="submit" class="btn btn-primary">Generate Flashcards</button>
+    </form>
+
+    {% if flashcards %}
+        <div class="mt-4">
+            <h2 class="mb-3">Generated Flashcards:</h2>
+            <form id="save-form" method="post" action="{% url 'flashcards:save_flashcards' %}">
+                {% csrf_token %}
+
+                <ul class="list-group">
+                    {% for flashcard in flashcards %}
+                    <li class="list-group-item">
+
+                        <input 
+                            type="checkbox" 
+                            name="flashcard_ids" 
+                            value="{{ flashcard.id }}" 
+                            checked
+                        >
+
+                        <div class="mb-2">
+                            <label><strong>Question:</strong></label>
+                            <input 
+                                type="text" 
+                                name="question_{{ flashcard.id }}" 
+                                value="{{ flashcard.question }}" 
+                                class="form-control"
+                            >
+                        </div>
+
+                        <div class="mb-2">
+                            <label><strong>Answer:</strong></label>
+                            <input 
+                                type="text" 
+                                name="answer_{{ flashcard.id }}" 
+                                value="{{ flashcard.answer }}" 
+                                class="form-control"
+                            >
+                        </div>
+
+                        <div>
+                            <label><strong>Category:</strong></label>
+                            <select 
+                                name="category_select_{{ flashcard.id }}" 
+                                class="form-control"
+                            >
+                                <option value="default">Default</option>
+                                {% if categories %}
+                                    {% for cat in categories %}
+                                        <option 
+                                            value="{{ cat }}"
+                                            {% if cat == flashcard.category %}selected{% endif %}
+                                        >
+                                            {{ cat }}
+                                        </option>
+                                    {% endfor %}
+                                {% endif %}
+                            </select>
+
+                            <label class="mt-1">Or type new category:</label>
+                            <input
+                                type="text"
+                                name="category_new_{{ flashcard.id }}"
+                                class="form-control"
+                                placeholder="e.g. 'My brand-new category'"
+                            >
+                        </div>
+                    </li>
+                    {% endfor %}
+                </ul>
+
+                <button type="submit" class="btn btn-success mt-3">
+                    Save Flashcards
+                </button>
+            </form>
+        </div>
+    {% else %}
+        <p class="mt-4 text-muted">
+            No results. Enter text and click "Generate Flashcards."
+        </p>
+    {% endif %}
+</div>
+{% endblock %}

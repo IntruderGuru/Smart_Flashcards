@@ -1,0 +1,24 @@
+{% extends "flashcards/base.html" %}
+
+{% block title %}Flashcard Categories{% endblock %}
+
+{% block content %}
+<div class="container">
+    <h1>Flashcard Categories</h1> 
+    <!-- 
+        Categories List
+        -------------------
+    -->
+    <ul>
+        {% for category in categories %}
+        <li>
+            <!-- 
+                Category Link
+                -------------------
+            -->
+            <a href="{% url 'flashcards:learn_flashcards' category %}">{{ category }}</a>
+        </li>
+        {% endfor %}
+    </ul>
+</div>
+{% endblock %}

@@ -1,0 +1,135 @@
+{% extends "flashcards/base.html" %}
+{% block title %}OCR Results{% endblock %}
+
+{% block content %}
+<div class="container mt-4">
+
+    <h1 class="mb-4">OCR Results</h1>
+
+    <h2>Generated Flashcards:</h2>
+
+    <form id="save-form" method="post" action="{% url 'flashcards:save_flashcards' %}">
+        {% csrf_token %}
+        {% if flashcards %}
+            <!-- 
+                Flashcards Table
+                -------------------
+            -->
+            <table class="table table-bordered">
+                <thead>
+                    <tr>
+                        <th>Select</th>
+                        <th>Question</th>
+                        <th>Answer</th>
+                        <th>Category</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    <!-- 
+                        Iterate Over Flashcards
+                        -------------------
+                    -->
+                    {% for flashcard in flashcards %}
+                    <tr>
+                        <td>
+                            <!-- 
+                                Flashcard Selection Checkbox
+                                -------------------
+                            -->
+                            <input 
+                                type="checkbox" 
+                                name="flashcard_ids" 
+                                value="{{ flashcard.id }}" 
+                                checked
+                            >
+                        </td>
+                        <td>
+                            <!-- 
+                                Editable Question Field
+                                -------------------
+                            -->
+                            <input 
+                                type="text" 
+                                name="question_{{ flashcard.id }}" 
+                                value="{{ flashcard.question }}" 
+                                class="form-control"
+                            >
+                        </td>
+                        <td>
+                            <!-- 
+                                Editable Answer Field
+                                -------------------
+                            -->
+                            <input 
+                                type="text" 
+                                name="answer_{{ flashcard.id }}" 
+                                value="{{ flashcard.answer }}" 
+                                class="form-control"
+                            >
+                        </td>
+                        <td>
+                            <!-- 
+                                Category Selection
+                                -------------------
+                            -->
+                            <label><strong>Category:</strong></label>
+                            <!-- 
+                                Existing Categories Dropdown
+                                -------------------
+                            -->
+                            <select 
+                                name="category_select_{{ flashcard.id }}" 
+                                class="form-control"
+                            >
+                                <option value="default">Default</option>
+                                {% if categories %}
+                                    {% for cat in categories %}
+                                        <option 
+                                            value="{{ cat }}"
+                                            {% if cat == flashcard.category %}selected{% endif %}
+                                        >
+                                            {{ cat }}
+                                        </option>
+                                    {% endfor %}
+                                {% endif %}
+                            </select>
+
+                            <!-- 
+                                New Category Input Field
+                                -------------------
+                            -->
+                            <label class="mt-1">Or type new category:</label>
+                            <input
+                                type="text"
+                                name="category_new_{{ flashcard.id }}"
+                                class="form-control"
+                                placeholder="e.g. 'My brand-new category'"
+                            >
+                        </td>
+                    </tr>
+                    {% endfor %}
+                </tbody>
+            </table>
+
+            <!-- 
+                Save Flashcards Button
+                -------------------
+            -->
+            <button type="submit" class="btn btn-primary">Save Selected Flashcards</button>
+        {% else %}
+            <!-- 
+                No Flashcards Message
+                -------------------
+            -->
+            <p class="text-muted">No flashcards to display.</p>
+        {% endif %}
+    </form>
+
+
+    <!-- 
+        Upload Another Image Button
+        -------------------
+    -->
+    <a href="{% url 'flashcards:upload_photo' %}" class="btn btn-secondary mt-3">Upload Another Image</a>
+</div>
+{% endblock %}

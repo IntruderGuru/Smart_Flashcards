@@ -1,0 +1,18 @@
+[run]
+source = flashcards
+omit =
+    flashcards/tests/*
+    flashcards/migrations/*
+    flashcards/services/__init__.py
+    flashcards/templatetags/*
+    flashcards/apps.py
+    flashcards/admin.py
+    flashcards/__init__.py
+
+[report]
+exclude_lines =
+    pragma: no cover
+    def __str__
+    if self\.debug
+    raise NotImplementedError
+    return NotImplemented

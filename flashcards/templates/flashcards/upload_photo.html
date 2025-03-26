@@ -1,0 +1,39 @@
+{% extends "flashcards/base.html" %}
+
+{% block title %}Upload Image{% endblock %}
+
+{% block content %}
+<div class="container mt-4">
+    <!-- 
+        Page Heading
+        -------------------
+        - Displays the main heading for the Upload Image page.
+    -->
+    <h1 class="mb-4">Upload Image</h1>
+    
+    <!-- 
+        Image Upload Form
+        -------------------
+    -->
+    <form method="post" enctype="multipart/form-data" action="{% url 'flashcards:upload_photo' %}" class="p-4 border rounded bg-light">
+        {% csrf_token %}
+        <div class="mb-3">
+            <!-- 
+                Image File Input Label
+                -------------------
+            -->
+            <label for="photo" class="form-label">Choose Image</label>
+            <!-- 
+                Image File Input
+                -------------------
+            -->
+            <input type="file" id="photo" name="photo" class="form-control" accept="image/*" required>
+        </div>
+        <!-- 
+            Submit Button
+            -------------------
+        -->
+        <button type="submit" class="btn btn-primary">Submit</button>
+    </form>
+</div>
+{% endblock %}

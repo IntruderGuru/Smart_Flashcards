@@ -1,0 +1,54 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>{% block title %}Flashcards App{% endblock %}</title>
+    {% load static %}
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0-alpha1/dist/css/bootstrap.min.css">
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0-alpha1/dist/js/bootstrap.bundle.min.js"></script>
+    <link rel="icon" href="{% static 'favicon.ico' %}">
+</head>
+<body>
+    <nav class="navbar navbar-expand-lg navbar-light bg-light">
+        <div class="container-fluid">
+            <a class="navbar-brand" href="{% url 'flashcards:flashcard_list' %}">Flashcards</a>
+            <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarNav"
+                aria-controls="navbarNav" aria-expanded="false" aria-label="Toggle navigation">
+                <span class="navbar-toggler-icon"></span>
+            </button>
+            <div class="collapse navbar-collapse" id="navbarNav">
+                <ul class="navbar-nav me-auto mb-2 mb-lg-0">
+                    <!-- 
+                        Add Flashcard Link
+                        -------------------
+                    -->
+                    <li class="nav-item">
+                        <a class="nav-link" href="{% url 'flashcards:add_flashcard' %}">Add Flashcard</a>
+                    </li>
+                    
+                    <!-- 
+                        Add from Image Link
+                        -------------------
+                    -->
+                    <li class="nav-item">
+                        <a class="nav-link" href="{% url 'flashcards:upload_photo' %}">Add from Image</a>
+                    </li>
+                    
+                    <!-- 
+                        Add from Text Link
+                        -------------------
+                    -->
+                    <li class="nav-item">
+                        <a class="nav-link" href="{% url 'flashcards:generate_from_text' %}">Add from Text</a>
+                    </li>
+                </ul>
+            </div>
+        </div>
+    </nav>
+    <div class="container mt-4">
+        {% block content %}
+        {% endblock %}
+    </div>
+</body>
+</html>

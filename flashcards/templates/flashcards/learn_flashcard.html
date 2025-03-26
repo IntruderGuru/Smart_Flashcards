@@ -1,0 +1,89 @@
+{% extends "flashcards/base.html" %}
+
+{% block title %}Learning Mode{% endblock %}
+
+{% block content %}
+<div class="container d-flex justify-content-center align-items-center" style="height: 80vh;">
+
+    <div class="card shadow-lg text-center" style="width: 100%; max-width: 500px; border-radius: 15px;">
+
+        <div class="card-header bg-primary text-white">
+            <h4>Learning Mode</h4>
+        </div>
+
+        <div class="card-body">
+            {% if not show_answer %}
+                <!-- 
+                    Flashcard Question Display
+                    -------------------
+                -->
+                <h3 class="card-title">{{ flashcard.question }}</h3>
+                
+                <!-- 
+                    Show Answer Button Form
+                    -------------------
+                -->
+                <form method="post" class="mt-4">
+                    {% csrf_token %}
+                    <input type="hidden" name="flashcard_id" value="{{ flashcard.id }}">
+                    <button type="submit" name="show_answer" class="btn btn-primary btn-lg">
+                        → Show Answer
+                    </button>
+                </form>
+            {% else %}
+                <!-- 
+                    Flashcard Answer Display
+                    -------------------
+                -->
+                <h3 class="card-title text-success">{{ flashcard.answer }}</h3>
+                
+                <!-- 
+                    Flashcard Source Display 
+                    -------------------
+                -->
+                {% if flashcard.source %}
+                <p class="text-muted">Source: {{ flashcard.source }}</p>
+                {% endif %}
+                
+                <!-- 
+                    Correctness Feedback Form
+                    -------------------
+                -->
+                <form method="post" class="mt-4">
+                    {% csrf_token %}
+                    <input type="hidden" name="flashcard_id" value="{{ flashcard.id }}">
+                    <div class="row">
+                        <div class="col-6">
+                            <!-- 
+                                Correct Button
+                                -------------------
+                            -->
+                            <button type="submit" name="correct" class="btn btn-success btn-block">
+                                ✔ Yes
+                            </button>
+                        </div>
+                        <div class="col-6">
+                            <!-- 
+                                Incorrect Button
+                                -------------------
+                            -->
+                            <button type="submit" name="incorrect" class="btn btn-danger btn-block">
+                                ✖ No
+                            </button>
+                        </div>
+                    </div>
+                </form>
+            {% endif %}
+        </div>
+        <div class="card-footer bg-light">
+            <!-- 
+                Go Back Button
+                -------------------
+            -->
+            <a href="{% url 'flashcards:flashcard_list' %}" class="btn btn-secondary">
+                ← Go Back
+            </a>
+        </div>
+    </div>
+</div>
+{% endblock %}

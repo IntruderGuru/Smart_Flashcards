@@ -1,0 +1,99 @@
+{% extends "flashcards/base.html" %}
+{% load dict_filters %}
+{% block title %}View Flashcard{% endblock %}
+
+{% block content %}
+<div class="container mt-4">
+    <h1 class="mb-4">View Flashcard</h1>
+
+    <form method="get" class="mb-3">
+        <div class="row g-3 align-items-center">
+            <!-- 
+                Render Format Label
+                -------------------
+            -->
+            <div class="col-auto">
+                <label for="formatSelect" class="col-form-label">Render Format:</label>
+            </div>
+            
+            <!-- 
+                Render Format Dropdown
+                -------------------
+            -->
+            <div class="col-auto">
+                <select name="format" id="formatSelect" class="form-select">
+                    <option value="text" {% if render_format == 'text' %}selected{% endif %}>Text</option>
+                    <option value="audio" {% if render_format == 'audio' %}selected{% endif %}>Audio</option>
+                </select>
+            </div>
+            
+            <!-- 
+                Language Label
+                -------------------
+            -->
+            <div class="col-auto">
+                <label for="langSelect" class="col-form-label">Language:</label>
+            </div>
+            
+            <!-- 
+                Language Dropdown
+                -------------------
+            -->
+            <div class="col-auto">
+                <select name="lang" id="langSelect" class="form-select">
+                    <option value="en" {% if selected_language == 'en' %}selected{% endif %}>English</option>
+                    <option value="pl" {% if selected_language == 'pl' %}selected{% endif %}>Polish</option>
+                </select>
+            </div>
+            
+            <!-- 
+                Render Button
+                -------------------
+            -->
+            <div class="col-auto">
+                <button type="submit" class="btn btn-primary">Render</button>
+            </div>
+        </div>
+    </form>
+
+    <!-- 
+        Flashcard Content Display
+        -------------------
+    -->
+    <div class="p-4 border rounded bg-light">
+        <pre class="flashcard-content">
+{{ rendered_content }}
+        </pre>
+    </div>
+
+    <!-- 
+        Audio Player Section
+        -------------------
+    -->
+    {% if audio_url %}
+        <div class="mt-4 text-center">
+            <p>Listen to this flashcard:</p>
+            <audio controls>
+                <source src="{{ audio_url }}" type="audio/mpeg">
+                Your browser does not support the audio element.
+            </audio>
+            <p>
+                <a href="{{ audio_url }}" class="btn btn-secondary mt-2">Download Audio</a>
+            </p>
+        </div>
+    {% endif %}
+</div>
+
+<style>
+    pre.flashcard-content {
+        font-family: Consolas, "Courier New", monospace; /* Use a fixed-width font */
+        background-color: #f9f9f9; /* Light gray background */
+        padding: 10px; /* Add padding for readability */
+        border-radius: 5px; /* Rounded corners for a modern look */
+        white-space: pre-wrap; /* Ensure long lines wrap */
+        margin: 0; /* Remove unnecessary margins */
+        text-align: left; /* Force left alignment */
+    }
+</style>
+
+{% endblock %}
